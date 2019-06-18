@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ASValueTrackingSlider.h"
+#import "CustomPlayEndView.h"
 
 @interface CustomPlayerControlView : UIView
 /// 进度条已经播放的颜色
@@ -20,6 +21,10 @@
 @property (nonatomic, assign) BOOL hiddenBackBtn;
 /// 是否总是隐藏控制层(默认自动隐藏和显示) [隐藏控制层UI,只接收相关代理回调]
 @property (nonatomic) BOOL alwaysHiddenControlUI;
+/// 全屏播放结束后是否显示分享界面
+@property (nonatomic, assign) BOOL showFullScreenPlayEndView;
+/// 全屏播放结束后分享界面
+@property (nonatomic, strong, null_resettable) CustomPlayEndView *fullScreenPlayEndView;
 
 /// [回调] 播放完毕
 - (void)zf_playerPlayEnd;
@@ -42,5 +47,8 @@
 - (void)setBottomMaskLayerImage:(UIImage*) image;
 /// 设置loading背景颜色
 - (void)uploadLoadingBackGroundColor:(UIColor*)color;
-
+/// 设置分享模型和点击回调
+- (void)setFullScreenShareItemsModel:(nullable NSArray<ShareItemModel *> *)itemsModel didSelectedItemBlock:(void (^ _Nullable)(ShareItemModel * _Nonnull))didSelectedItemBlock;
+/// 设置是否全屏
+- (void)setPlayerFullScreen:(BOOL)fullScreen;
 @end

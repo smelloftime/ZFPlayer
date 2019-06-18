@@ -378,6 +378,16 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     _hiddenBackBtn = hiddenBackBtn;
     _backBtn.hidden = hiddenBackBtn;
 }
+
+- (void)setShowFullScreenPlayEndView:(BOOL)showFullScreenPlayEndView {
+    _showFullScreenPlayEndView = showFullScreenPlayEndView;
+    if (showFullScreenPlayEndView) {
+        [self fullScreenPlayEndView];
+    } else if (_fullScreenPlayEndView) {
+        [_fullScreenPlayEndView removeFromSuperview];
+        _fullScreenPlayEndView = nil;
+    }
+}
 #pragma mark - Action
 
 /**
@@ -424,8 +434,24 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     sender.hidden = YES;
     self.fullScreen = NO;
     self.fullScreenBtn.selected = NO;
+    if (self.showFullScreenPlayEndView && self.playeEnd) {
+        [self zf_playerPlayEnd];
+    }
     if ([self.zfDelegate respondsToSelector:@selector(zf_controlView:fullScreenAction:)]) {
         [self.zfDelegate zf_controlView:self fullScreenAction:sender];
+    }
+}
+
+- (void)setPlayerFullScreen:(BOOL)fullScreen {
+    self.fullScreenBtn.selected = fullScreen;
+    self.fullScreen = fullScreen;
+    self.backBtn.hidden = _hiddenBackBtn ? _hiddenBackBtn : !fullScreen;
+    self.topImageView.hidden = !fullScreen;
+    if ([self.zfDelegate respondsToSelector:@selector(zf_controlView:fullScreenAction:)]) {
+        [self.zfDelegate zf_controlView:self fullScreenAction:nil];
+    }
+    if (self.showFullScreenPlayEndView && self.playeEnd) {
+        [self zf_playerPlayEnd];
     }
 }
 
@@ -552,7 +578,7 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 
 - (void)playerPlayDidEnd {
 //    self.backgroundColor  = RGBA(0, 0, 0, .6);
-    if (self.hiddenReplayAndShareBtn) {
+    if (self.hiddenReplayAndShareBtn || self.isFullScreen) {
         self.repeatBtn.hidden = YES;
         self.shareBtn.hidden = YES;
         self.repeatLabel.hidden = YES;
@@ -567,6 +593,11 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     if ([self currentIsFullScreen] == YES) {
         self.topImageView.hidden = NO;
         self.backBtn.hidden = NO;
+        if (self.showFullScreenPlayEndView) {
+            _fullScreenPlayEndView.hidden = NO;
+        } else {
+            _fullScreenPlayEndView.hidden = YES;
+        }
     } else {
         self.topImageView.hidden = YES;
         self.backBtn.hidden = YES;
@@ -997,6 +1028,19 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     return _placeholderImageView;
 }
 
+- (CustomPlayEndView *)fullScreenPlayEndView {
+    if (!_fullScreenPlayEndView) {
+        _fullScreenPlayEndView = [[CustomPlayEndView alloc] init];
+        [_fullScreenPlayEndView setHidden:YES];
+        [_fullScreenPlayEndView.replayButton addTarget:self action:@selector(repeatBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        [self insertSubview:_fullScreenPlayEndView belowSubview:_topImageView];
+        [_fullScreenPlayEndView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(self);
+        }];
+    }
+    return _fullScreenPlayEndView;
+}
+
 #pragma mark - UIGestureRecognizerDelegate
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
@@ -1020,6 +1064,7 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     self.fastView.hidden             = YES;
     self.repeatBtn.hidden            = YES;
     self.shareBtn.hidden = YES;
+    _fullScreenPlayEndView.hidden = YES;
     self.repeatLabel.hidden = YES;
     self.shareLabel.hidden = YES;
     self.resolutionView.hidden       = YES;
@@ -1038,6 +1083,7 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     self.fastView.hidden        = YES;
     self.repeatBtn.hidden       = YES;
     self.shareBtn.hidden = YES;
+    _fullScreenPlayEndView.hidden = YES;
     self.repeatLabel.hidden = YES;
     self.shareLabel.hidden = YES;
     self.resolutionView.hidden  = YES;
@@ -1235,7 +1281,7 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 
 /** 播放完了 */
 - (void)zf_playerPlayEnd {
-    if (self.hiddenReplayAndShareBtn) {
+    if (self.hiddenReplayAndShareBtn || (self.isFullScreen && _showFullScreenPlayEndView)) {
         self.repeatBtn.hidden = YES;
         self.shareBtn.hidden = YES;
         self.repeatLabel.hidden = YES;
@@ -1245,6 +1291,12 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
         self.shareBtn.hidden = NO;
         self.repeatLabel.hidden = NO;
         self.shareLabel.hidden = NO;
+    }
+    
+    if (self.isFullScreen && _showFullScreenPlayEndView) {
+        _fullScreenPlayEndView.hidden = NO;
+    } else {
+        _fullScreenPlayEndView.hidden = YES;
     }
 
     self.playeEnd         = YES;
@@ -1339,6 +1391,11 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 /// 隐藏底部阴影
 - (void)setBottomMaskLayerImage:(UIImage*) image {
     self.bottomImageView.image = image;
+}
+
+- (void)setFullScreenShareItemsModel:(nullable NSArray<ShareItemModel *> *)itemsModel didSelectedItemBlock:(void (^ _Nullable)(ShareItemModel * _Nonnull))didSelectedItemBlock {
+    self.fullScreenPlayEndView.shareItemsModel = itemsModel;
+    self.fullScreenPlayEndView.didTapShareItemBlock =  didSelectedItemBlock;
 }
 #pragma clang diagnostic pop
 
