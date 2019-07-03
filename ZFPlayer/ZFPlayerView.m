@@ -1141,6 +1141,10 @@ typedef NS_ENUM(NSInteger, PanDirection){
         if (!self.isDragged) { // 如果不是拖拽中，直接结束播放
             self.playDidEnd = YES;
             [self.controlView zf_playerPlayEnd];
+            [self.playerLayer removeFromSuperlayer];
+            [self.placeholderBlurImageView removeFromSuperview];
+            self.imageGenerator = nil;
+            self.player         = nil;
         }
     }
 }
@@ -1684,6 +1688,8 @@ typedef NS_ENUM(NSInteger, PanDirection){
     }
     // 如果是重播直接隐藏占位图
     [self.controlView zf_playerItemPlaying];
+    [self configZFPlayer];
+
 }
 
 /** 加载失败按钮事件 */
