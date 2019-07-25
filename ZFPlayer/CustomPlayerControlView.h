@@ -25,6 +25,8 @@
 @property (nonatomic, assign) BOOL showFullScreenPlayEndView;
 /// 全屏播放结束后分享界面
 @property (nonatomic, strong, null_resettable) CustomPlayEndView *fullScreenPlayEndView;
+/// [回调] 播放完毕回调属性
+@property (nonatomic, copy) void(^ _Nullable zf_playerPlayEndBlock)();
 
 /// [回调] 播放完毕
 - (void)zf_playerPlayEnd;
