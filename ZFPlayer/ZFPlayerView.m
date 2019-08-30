@@ -1141,7 +1141,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
         if (!self.isDragged) { // 如果不是拖拽中，直接结束播放
             self.playDidEnd = YES;
             [self.controlView zf_playerPlayEnd];
-            if (!self.holdPlayerWhilePlayEnd) {
+            if (self.deallocPlayerWhilePlayEnd) {
                 [self.playerLayer removeFromSuperlayer];
                 [self.placeholderBlurImageView removeFromSuperview];
                 self.imageGenerator = nil;
