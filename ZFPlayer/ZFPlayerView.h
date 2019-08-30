@@ -88,8 +88,8 @@ typedef NS_ENUM(NSInteger, ZFPlayerState) {
 @property (nonatomic, assign) BOOL                    fullScreenPlay;
 /// 占位图
 @property (nonatomic, strong) UIImageView *placeholderBlurImageView;
-/// 播放结束后是否继续持有播发器
-@property (nonatomic, assign) BOOL                    holdPlayerWhilePlayEnd;
+/// 播放结束后是否释放 默认NO
+@property (nonatomic, assign) BOOL                    deallocPlayerWhilePlayEnd;
 
 /**
  *  单例，用于列表cell上多个视频
