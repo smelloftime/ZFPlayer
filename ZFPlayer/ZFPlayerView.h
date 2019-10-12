@@ -26,6 +26,7 @@
 #import "ZFPlayerModel.h"
 #import "ZFPlayerControlViewDelegate.h"
 
+@class ZFPlayerView;
 @protocol ZFPlayerDelegate <NSObject>
 @optional
 /** 返回按钮事件 */
@@ -36,6 +37,8 @@
 - (void)zf_playerControlViewWillShow:(UIView *)controlView isFullscreen:(BOOL)fullscreen;
 /** 控制层即将隐藏 */
 - (void)zf_playerControlViewWillHidden:(UIView *)controlView isFullscreen:(BOOL)fullscreen;
+
+- (void)zf_playerChangeFullScreenState:(BOOL)isFullScreen playerView:(ZFPlayerView *)playerView;
 
 @end
 

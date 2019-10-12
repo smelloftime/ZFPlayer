@@ -12,6 +12,25 @@
 #import "UIView+CustomControlView.h"
 #import <UIKit/UIKit.h>
 
+@implementation PlayerControlViewConfig
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _fullScreenImage = ZFPlayerImage(@"ZFPlayer_fullscreen");
+        _shrinkScreenImage = ZFPlayerImage(@"ZFPlayer_shrinkscreen");
+        _minimumTrackTintColor = RGBA(89, 182, 215, 1);
+        _maximumTrackTintColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
+        _timeLabelColor = [UIColor whiteColor];
+        _bottomViewHeight = 50;
+        _bottomViewHeightOnFullScreenImage = 50;
+    }
+    return self;
+}
+
+@end
+
 @interface IndicatorFlowerView: UIImageView
 
 @property (nonatomic, strong) NSArray *loadingImages;
@@ -254,7 +273,7 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     }];
     
     [self.fullScreenBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(40);
+        make.height.equalTo(self.bottomImageView);
         make.width.mas_equalTo(30);
         make.trailing.equalTo(self.bottomImageView.mas_trailing);
         make.centerY.equalTo(self.bottomImageView);
@@ -276,7 +295,8 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
         make.leading.equalTo(self.currentTimeLabel.mas_trailing).offset(12);
         make.trailing.equalTo(self.totalTimeLabel.mas_leading).offset(-12);
         make.centerY.equalTo(self.bottomImageView).offset(-1);
-        make.height.mas_equalTo(30);
+        make.height.mas_equalTo(30).priorityLow();
+        make.height.lessThanOrEqualTo(self.bottomImageView);
     }];
 
     [self.repeatBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -645,13 +665,20 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     }];
 
     [self.bottomImageView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        CGFloat height = 50;
         if (self.fullScreen == YES) {
             make.bottom.mas_equalTo(iPhoneX ? -34 : 0);
+            if (self.controlViewConfig) {
+                height = self.controlViewConfig.bottomViewHeightOnFullScreenImage;
+            }
         } else {
             make.leading.trailing.bottom.mas_equalTo(0);
+            if (self.controlViewConfig) {
+                height = self.controlViewConfig.bottomViewHeight;
+            }
         }
         make.leading.trailing.mas_equalTo(0);
-        make.height.mas_equalTo(50);
+        make.height.mas_equalTo(height);
     }];
 }
 /**
@@ -671,13 +698,20 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     }];
 
     [self.bottomImageView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        CGFloat height = 50;
         if (self.fullScreen == YES) {
             make.bottom.mas_equalTo(iPhoneX ? -34 : 0);
+            if (self.controlViewConfig) {
+                height = self.controlViewConfig.bottomViewHeightOnFullScreenImage;
+            }
         } else {
             make.leading.trailing.bottom.mas_equalTo(0);
+            if (self.controlViewConfig) {
+                height = self.controlViewConfig.bottomViewHeight;
+            }
         }
         make.leading.trailing.mas_equalTo(0);
-        make.height.mas_equalTo(50);
+        make.height.mas_equalTo(height);
     }];
 }
 
@@ -758,6 +792,23 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 - (void)setMinimumTrackTintColor:(UIColor *)minimumTrackTintColor {
     _minimumTrackTintColor = minimumTrackTintColor;
     self.videoSlider.minimumTrackTintColor = minimumTrackTintColor;
+}
+
+- (void)setControlViewConfig:(PlayerControlViewConfig *)controlViewConfig {
+    _controlViewConfig = controlViewConfig;
+    [self.fullScreenBtn setImage:controlViewConfig.fullScreenImage forState:UIControlStateNormal];
+    [self.fullScreenBtn setImage:controlViewConfig.shrinkScreenImage forState:UIControlStateSelected];
+    self.videoSlider.minimumTrackTintColor = controlViewConfig.minimumTrackTintColor;
+    self.videoSlider.maximumTrackTintColor = controlViewConfig.maximumTrackTintColor;
+    self.currentTimeLabel.textColor = controlViewConfig.timeLabelColor;
+    self.totalTimeLabel.textColor = controlViewConfig.timeLabelColor;
+    [self.bottomImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+        if (self.fullScreen == YES) {
+            make.height.mas_equalTo(controlViewConfig.bottomViewHeightOnFullScreenImage);
+        } else {
+            make.height.mas_equalTo(controlViewConfig.bottomViewHeight);
+        }
+    }];
 }
 
 #pragma mark - getter
@@ -1370,7 +1421,9 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 
 /** 播放按钮状态 */
 - (void)zf_playerPlayBtnState:(BOOL)state {
-    self.startBtn.selected = state;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.startBtn.selected = state;
+    });
 }
 
 /** 下载按钮状态 */
