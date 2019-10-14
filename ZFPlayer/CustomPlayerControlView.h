@@ -10,6 +10,16 @@
 #import "ASValueTrackingSlider.h"
 #import "CustomPlayEndView.h"
 
+@interface PlayerControlViewConfig : NSObject
+@property (nonatomic, strong, nullable) UIImage *fullScreenImage;
+@property (nonatomic, strong, nullable) UIImage *shrinkScreenImage;
+@property (nonatomic, strong, nullable) UIColor *minimumTrackTintColor;
+@property (nonatomic, strong, nullable) UIColor *maximumTrackTintColor;
+@property (nonatomic, strong, nullable) UIColor *timeLabelColor;
+@property (nonatomic, assign) CGFloat bottomViewHeight;
+@property (nonatomic, assign) CGFloat bottomViewHeightOnFullScreenImage;
+@end
+
 @interface CustomPlayerControlView : UIView
 /// 进度条已经播放的颜色
 @property (strong, nonatomic) UIColor *minimumTrackTintColor;
@@ -27,6 +37,8 @@
 @property (nonatomic, strong, null_resettable) CustomPlayEndView *fullScreenPlayEndView;
 /// [回调] 播放完毕回调属性
 @property (nonatomic, copy) void(^ _Nullable zf_playerPlayEndBlock)();
+
+@property (nonatomic, strong, nullable) PlayerControlViewConfig *controlViewConfig;
 
 /// [回调] 播放完毕
 - (void)zf_playerPlayEnd;

@@ -1108,6 +1108,9 @@ typedef NS_ENUM(NSInteger, PanDirection){
         self.placeholderBlurImageView.alpha = 0;
         /// 小窗口不显示下载
         [self.controlView zf_playerHasDownloadFunction:NO];
+        if ([self.delegate respondsToSelector:@selector(zf_playerChangeFullScreenState:playerView:)]) {
+            [self.delegate zf_playerChangeFullScreenState:self.isFullScreen playerView:self];
+        }
         return;
     } else {
         UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
@@ -1121,6 +1124,9 @@ typedef NS_ENUM(NSInteger, PanDirection){
         /// 小窗口不显示下载
         [self.controlView zf_playerHasDownloadFunction:self.hasDownload];
         [[UIApplication sharedApplication] setStatusBarHidden:YES];
+        if ([self.delegate respondsToSelector:@selector(zf_playerChangeFullScreenState:playerView:)]) {
+            [self.delegate zf_playerChangeFullScreenState:self.isFullScreen playerView:self];
+        }
     }
 }
 
