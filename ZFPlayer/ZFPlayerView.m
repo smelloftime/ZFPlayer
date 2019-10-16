@@ -359,6 +359,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
         self.scrollView     = nil;
         self.indexPath     = nil;
     }
+    self.isFullScreen = NO;
 }
 
 /**
