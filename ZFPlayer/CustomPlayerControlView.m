@@ -1127,6 +1127,14 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     self.showing                     = NO;
     self.playeEnd                    = NO;
     self.placeholderImageView.alpha  = 1;
+    self.fullScreenBtn.selected = NO;
+    self.fullScreen = NO;
+    if (self.controlViewConfig != nil) {
+        [self.bottomImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(self.controlViewConfig.bottomViewHeight);
+        }];
+    }
+
     [self hideControlView];
 }
 
@@ -1332,6 +1340,8 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 
 /** 播放完了 */
 - (void)zf_playerPlayEnd {
+    // 隐藏controlView
+    [self hideControlView];
     if (self.hiddenReplayAndShareBtn || (self.isFullScreen && _showFullScreenPlayEndView)) {
         self.repeatBtn.hidden = YES;
         self.shareBtn.hidden = YES;
@@ -1358,13 +1368,13 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     } else {
         self.topImageView.hidden = YES;
         self.backBtn.hidden = YES;
+        self.fullScreen = NO;
     }
     if (self.hiddenBackBtn) {
         self.backBtn.hidden = YES;
     }
     NSLog([NSString stringWithFormat:@"zf_playerPlayEnd - %d", self.backBtn.isHidden]);
-    // 隐藏controlView
-    [self hideControlView];
+
 //    self.backgroundColor  = RGBA(0, 0, 0, .3);
     ZFPlayerShared.isStatusBarHidden = NO;
     if (self.zf_playerPlayEndBlock != nil) {
