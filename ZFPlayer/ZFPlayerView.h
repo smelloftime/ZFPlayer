@@ -93,7 +93,8 @@ typedef NS_ENUM(NSInteger, ZFPlayerState) {
 @property (nonatomic, strong) UIImageView *placeholderBlurImageView;
 /// 播放结束后是否释放 默认NO
 @property (nonatomic, assign) BOOL                    deallocPlayerWhilePlayEnd;
-
+/// 循环播放 默认NO
+@property (nonatomic, assign) BOOL                    repeatPlay;
 /**
  *  单例，用于列表cell上多个视频
  *

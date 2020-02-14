@@ -1145,6 +1145,12 @@ typedef NS_ENUM(NSInteger, PanDirection){
  *  @param notification 通知
  */
 - (void)moviePlayDidEnd:(NSNotification *)notification {
+    if (self.repeatPlay) {
+        [self replayVideo:^(BOOL finished) {
+            
+        }];
+        return;
+    }
     self.state = ZFPlayerStateStopped;
     if (self.isBottomVideo && !self.isFullScreen) { // 播放完了，如果是在小屏模式 && 在bottom位置，直接关闭播放器
         self.repeatToPlay = NO;
