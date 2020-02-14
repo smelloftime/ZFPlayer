@@ -143,6 +143,8 @@ typedef NS_ENUM(NSInteger, ZFPlayerState) {
 - (void)replayVideo:(void (^)(BOOL finished))completionHandler;
 /// iPhoneX系列机型判断
 + (BOOL)zf_isIPhoneX;
++ (CGFloat)zf_liuhaiHeight;
++ (CGFloat)zf_BottomSafeAreaHeight;
 /// 在内存无法正常释放时，手动释放部分资源
 - (void)removePlayer;
 

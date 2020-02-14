@@ -23,6 +23,10 @@
 
 #define iPhone4s ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 960), [[UIScreen mainScreen] currentMode].size) : NO)
 #define iPhoneX ([ZFPlayerView zf_isIPhoneX])
+/// 刘海高度
+#define zfLiuhaiHeight ([ZFPlayerView zf_liuhaiHeight])
+/// 底部安全区域高度
+#define zfBottomSafeAreaHeight ([ZFPlayerView zf_BottomSafeAreaHeight])
 
 // 监听TableView的contentOffset
 #define kZFPlayerViewContentOffset          @"contentOffset"

@@ -579,7 +579,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
  @return iPhoneX：44 other:20
  */
 + (CGFloat )getNavBarTopHeight {
-    if (ScreenWidth == 375 && ScreenHeight == 812) {
+    if (iPhoneX) {
         return 44;
     }
     return 20;
@@ -1875,6 +1875,20 @@ typedef NS_ENUM(NSInteger, PanDirection){
       || [platform isEqualToString:@"iPhone12,1"] || [platform isEqualToString:@"iPhone12,3"] || [platform isEqualToString:@"iPhone12,5"]
       ;
     return isIPhoneX;
+}
+
++ (CGFloat)zf_liuhaiHeight {
+    if (iPhoneX) {
+        return 30;
+    }
+    return 0;
+}
+
++ (CGFloat)zf_BottomSafeAreaHeight {
+    if (iPhoneX) {
+        return 34;
+    }
+    return 0;
 }
 - (void)removePlayer {
     [self.playerItem cancelPendingSeeks];
