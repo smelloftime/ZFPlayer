@@ -154,6 +154,12 @@ typedef NS_ENUM(NSInteger, PanDirection){
     return self;
 }
 
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) { [self initializeThePlayer]; }
+    return self;
+}
 /**
  *  storyboard、xib加载playerView会调用此方法
  */
