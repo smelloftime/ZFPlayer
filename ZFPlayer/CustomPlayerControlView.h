@@ -65,4 +65,6 @@
 - (void)setFullScreenShareItemsModel:(nullable NSArray<ShareItemModel *> *)itemsModel didSelectedItemBlock:(void (^ _Nullable)(ShareItemModel * _Nonnull))didSelectedItemBlock;
 /// 设置是否全屏
 - (void)setPlayerFullScreen:(BOOL)fullScreen;
+
+- (instancetype)init;
 @end
