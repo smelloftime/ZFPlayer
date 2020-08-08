@@ -1841,6 +1841,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
             [weakSelf.player play];
             weakSelf.seekTime = 0;
             weakSelf.isDragged = NO;
+            weakSelf.playDidEnd = NO;
             // 结束滑动
             [weakSelf.controlView zf_playerDraggedEnd];
             if (!weakSelf.playerItem.isPlaybackLikelyToKeepUp && !weakSelf.isLocalVideo) { weakSelf.state = ZFPlayerStateBuffering; }
