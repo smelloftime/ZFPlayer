@@ -39,7 +39,8 @@
 - (void)zf_playerControlViewWillHidden:(UIView *)controlView isFullscreen:(BOOL)fullscreen;
 
 - (void)zf_playerChangeFullScreenState:(BOOL)isFullScreen playerView:(ZFPlayerView *)playerView;
-
+/*更新当前播放时间*/
+- (void)zf_playerUpdateCurrentTime:(NSInteger)currentTime;
 @end
 
 // playerLayer的填充模式（默认：等比例填充，直到一个维度到达区域边界）

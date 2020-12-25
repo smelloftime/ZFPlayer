@@ -129,6 +129,9 @@
         self.backBtn.alpha = !fullscreen;
     }];
 }
+- (void)zf_playerUpdateCurrentTime:(NSInteger)currentTime {
+    NSLog(@"currentTime %d", currentTime);
+}
 
 #pragma mark - Getter
 
