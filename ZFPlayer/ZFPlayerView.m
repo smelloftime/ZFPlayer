@@ -430,6 +430,10 @@ typedef NS_ENUM(NSInteger, PanDirection){
  *  设置Player相关参数
  */
 - (void)configZFPlayer {
+    if (self.playerLayer != nil) {
+        [self.playerLayer removeFromSuperlayer];
+    }
+    
     self.urlAsset = [AVURLAsset assetWithURL:self.videoURL];
     // 初始化playerItem
 //    self.playerItem = [AVPlayerItem playerItemWithAsset:self.urlAsset];
