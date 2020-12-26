@@ -434,8 +434,8 @@ typedef NS_ENUM(NSInteger, PanDirection){
     // 初始化playerItem
 //    self.playerItem = [AVPlayerItem playerItemWithAsset:self.urlAsset];
     /// 默认支持视频缓存代理
-    AVPlayerItem *playerItem = [self.resourceLoaderManager playerItemWithURL:self.videoURL];
-    self.playerItem = playerItem;
+//    AVPlayerItem *playerItem = [self.resourceLoaderManager playerItemWithURL:self.videoURL];
+    self.playerItem = [AVPlayerItem playerItemWithAsset:self.urlAsset];
     // 每次都重新创建Player，替换replaceCurrentItemWithPlayerItem:，该方法阻塞线程
     self.player = [AVPlayer playerWithPlayerItem:self.playerItem];
     
@@ -1844,6 +1844,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
             [weakSelf.player play];
             weakSelf.seekTime = 0;
             weakSelf.isDragged = NO;
+            weakSelf.playDidEnd = NO;
             // 结束滑动
             [weakSelf.controlView zf_playerDraggedEnd];
             if (!weakSelf.playerItem.isPlaybackLikelyToKeepUp && !weakSelf.isLocalVideo) { weakSelf.state = ZFPlayerStateBuffering; }
