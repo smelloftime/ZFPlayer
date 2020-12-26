@@ -515,7 +515,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
 
 - (void)createTimer {
     __weak typeof(self) weakSelf = self;
-    self.timeObserve = [self.player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1, 1) queue:nil usingBlock:^(CMTime time){
+    self.timeObserve = [self.player addPeriodicTimeObserverForInterval:CMTimeMake(1, 2) queue:nil usingBlock:^(CMTime time){
         AVPlayerItem *currentItem = weakSelf.playerItem;
         NSArray *loadedRanges = currentItem.seekableTimeRanges;
         if (loadedRanges.count > 0 && currentItem.duration.timescale != 0) {
@@ -1708,7 +1708,6 @@ typedef NS_ENUM(NSInteger, PanDirection){
     self.playDidEnd   = NO;
     // 重播改为NO
     self.repeatToPlay = NO;
-    [self seekToTime:0 completionHandler:nil];
     if ([self.videoURL.scheme isEqualToString:@"file"]) {
         self.state = ZFPlayerStatePlaying;
     } else {
