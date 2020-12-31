@@ -1901,4 +1901,20 @@ typedef NS_ENUM(NSInteger, PanDirection){
     [self.playerItem cancelPendingSeeks];
     [self.playerItem.asset cancelLoading];
 }
+- (void)seekTime: (NSInteger)timeCount complet: (void (^)(BOOL finished))completionHandler {
+    [self.player pause];
+    CMTime dragedCMTime = CMTimeMakeWithSeconds(timeCount, 30); //kCMTimeZero
+    __weak typeof(self) weakSelf = self;
+    [self.player seekToTime:dragedCMTime toleranceBefore:CMTimeMakeWithSeconds(timeCount + 1, 30) toleranceAfter:CMTimeMakeWithSeconds(timeCount + 1, 30) completionHandler:^(BOOL finished) {
+        // 视频跳转回调
+        if (completionHandler) { completionHandler(finished); }
+        [weakSelf.player play];
+        weakSelf.seekTime = timeCount;
+        weakSelf.isDragged = NO;
+        weakSelf.playDidEnd = NO;
+        // 结束滑动
+        [weakSelf.controlView zf_playerDraggedEnd];
+        if (!weakSelf.playerItem.isPlaybackLikelyToKeepUp && !weakSelf.isLocalVideo) { weakSelf.state = ZFPlayerStateBuffering; }
+    }];
+}
 @end

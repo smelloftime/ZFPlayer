@@ -148,5 +148,6 @@ typedef NS_ENUM(NSInteger, ZFPlayerState) {
 + (CGFloat)zf_BottomSafeAreaHeight;
 /// 在内存无法正常释放时，手动释放部分资源
 - (void)removePlayer;
-
+/// 跳转到到指定播放时长
+- (void)seekTime: (NSInteger)timeCount complet: (void (^)(BOOL finished))completionHandler;
 @end
