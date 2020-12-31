@@ -1549,13 +1549,17 @@ typedef NS_ENUM(NSInteger, PanDirection){
 }
 
 - (void)setControlView:(UIView *)controlView {
-    if (_controlView) { return; }
+    if (_controlView != nil) {
+        [_controlView removeFromSuperview];
+    }
     _controlView = controlView;
-    controlView.zfDelegate = self;
-    [self addSubview:controlView];
-    [controlView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.mas_equalTo(UIEdgeInsetsZero);
-    }];
+    if (controlView != nil) {
+        controlView.zfDelegate = self;
+        [self addSubview:controlView];
+        [controlView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.mas_equalTo(UIEdgeInsetsZero);
+        }];
+    }
 }
 
 - (void)setPlayerModel:(ZFPlayerModel *)playerModel {
